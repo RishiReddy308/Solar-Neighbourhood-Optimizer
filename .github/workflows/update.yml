@@ -1,1 +1,36 @@
+name: Daily Solar Data Panel Update
 
+on:
+  schedule:
+    - cron: '0 0 * * *' # runs at midnight
+  workflow_dispatch: # manual run
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install libraries
+        run: pip install openmeteo-requests requests-cache retry-requests pytz
+
+      - name: Run script
+        run: python main.py
+
+      - name: Commit and push
+        run: |
+          git config --global user.name 'Auto Bot'
+          git config --global user.email 'actions@github.com'
+          git add index.html
+          git commit -m "Daily solar update"
+          git push
