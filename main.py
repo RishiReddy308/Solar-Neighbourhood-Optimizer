@@ -28,8 +28,8 @@ openmeteo = openmeteo_requests.Client(session = retry_session)
 # The order of variables in hourly or daily is important to assign them correctly below
 url = "https://api.open-meteo.com/v1/forecast"
 params = {
-	"latitude": 52.52,
-	"longitude": 113.41,
+	"latitude": 43.47,
+	"longitude": -79.41,
 	"hourly": ["temperature_2m", "shortwave_radiation"],
 }
 responses = openmeteo.weather_api(url, params=params)
@@ -57,10 +57,23 @@ hourly_data["shortwave_radiation"] = hourly_shortwave_radiation
 hourly_dataframe = pd.DataFrame(data = hourly_data)
 
 hourly_dataframe["estimated demand"] = hourly_dataframe.apply(estimate_demand, axis = 1)
-print("\nHourly data\n", hourly_dataframe)
 
 # Create the graph using Plotly 
-fig = px.line(hourly_dataframe, x='date', y='shortwave_radiation', title='solar rad')
+fig = px.line(hourly_dataframe, x = 'date', y = 'shortwave_radiation', title = 'solar rad')
+fig2 = px.line(hourly_dataframe, x = 'date', y = 'temperature_2m', title = 'temp')
 
-# write to html
-fig.write_html("index.html")
+
+f = open('index.html', 'w')
+
+# write header
+f.write("<html><head><title>Solar Dashboard</title></head><body>")
+
+# write main title
+f.write("<h1 style= 'text-align: center; '> Daily Solar & Temperature Forecast</h1>")
+
+#write graphs
+#cdn to draw the graphs
+f.write(fig.to_html(full_html = False, include_plotlyjs = 'cdn'))
+f.write(fig2.to_html(full_html = False, include_plotlyjs = 'cdn'))
+
+f.write("</body></html>")
