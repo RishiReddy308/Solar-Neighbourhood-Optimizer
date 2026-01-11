@@ -22,7 +22,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install libraries
-        run: pip install openmeteo-requests requests-cache retry-requests pytz
+        run: pip install -r requirements.txt
 
       - name: Run script
         run: python main.py
