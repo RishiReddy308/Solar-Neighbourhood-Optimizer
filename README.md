@@ -1,1 +1,1 @@
-# Solar-Neighbourhood-Optimizer
+# Solar Panel Electricity Usage Time Optimizer
