@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '*0 0 * * *' # runs at midnight
+    - cron: '0 5 * * *' # runs at midnight
   workflow_dispatch: # manual run
 
 permissions:
